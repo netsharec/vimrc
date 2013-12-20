@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/gle/work/repo/nut2/trunk/cnb/UserCommand'
+let g:netrw_dirhist_2='/home/gle/work/repo/nut2/trunk/cnb'
+let g:netrw_dirhist_3='/home/gle/work/repo/nut2/trunk/cnb/ParserInterface'
+let g:netrw_dirhist_4='/home/gle/work/repo/nut2/trunk/cnb/UserCommand'
+let g:netrw_dirhist_5='/home/gle/work/repo/nut2/trunk'
+let g:netrw_dirhist_6='/home/gle/work/repo/nut2/trunk/dgtSampling'
+let g:netrw_dirhist_7='/home/gle/work/repo/nut2/trunk/cnc'
