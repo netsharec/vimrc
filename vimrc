@@ -131,6 +131,8 @@ filetype plugin indent on
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py'
 let g:EclimCompletionMethod = 'omnifunc'
 
+let g:ycm_confirm_extra_conf = 0
+
 " end bundle 配置
 
 
@@ -684,7 +686,7 @@ function ClosePair(char)
     endif
 endf
 
-" colorscheme 256jungle 
+" colorscheme jellybeans
 colorscheme 256jungle
 
 
@@ -895,3 +897,11 @@ augroup TabClosed
                 \       |endif
                 \       |let s:prevtabnum=tabpagenr('$')
 augroup END
+
+au FileType c set colorcolumn=81
+au FileType cpp set colorcolumn=81
+au FileType python  set colorcolumn=81
+" set cuc " 当前光标列高亮
+
+" 分界线颜色
+hi colorcolumn ctermbg=8 ctermfg=1
