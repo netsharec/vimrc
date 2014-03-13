@@ -905,3 +905,74 @@ au FileType python  set colorcolumn=81
 
 " 分界线颜色
 hi colorcolumn ctermbg=8 ctermfg=1
+
+" 判断是否存在可见字符
+function IsBlankLine(str)
+endfunction
+
+" 同级缩进块跳转
+function! JumpUp()
+	let CurrIndent = indent('.')
+	let CurrLineNo = line('.')
+	if CurrLineNo == 1
+		return
+	endif
+	let UpLine = CurrLineNo - 1
+	let UpIndent = indent(UpLine)
+	if UpIndent > CurrIndent
+		" 块的底部, 以上一行作为参考信息
+		let CurrIndent = UpIndent
+		let UpLine -= 1
+		if UpLine > 0
+			let UpIndent = indent(UpLine)
+		else
+			exe "normal gg"
+			return
+		endif
+	endif
+	" 块的中部
+	while UpLine > 1
+		if UpIndent < CurrIndent && strlen(getline(UpLine)) > 0
+			exe "normal " . UpLine . "gg"
+			return
+		endif
+		let UpLine = UpLine - 1
+		let UpIndent = indent(UpLine)
+	endwhile
+	exe "normal gg"
+endfunction
+
+function! JumpDown()
+	let CurrIndent = indent('.')
+	let CurrLineNo = line('.')
+	if CurrLineNo == line('$')
+		return
+	endif
+	let DownLine = CurrLineNo + 1
+	let DownIndent = indent(DownLine)
+	if DownIndent > CurrIndent
+		" 块的顶部, 以下一行作为参考信息
+		let CurrIndent = DownIndent
+		let DownLine += 1
+		if DownLine <= line('$')
+			let DownIndent = indent(DownLine)
+		else
+			exe "normal G"
+			return
+		endif
+	endif
+	" 块的中部
+	while DownLine < line('$')
+		if DownIndent < CurrIndent && strlen(getline(DownLine)) > 0
+			let TmpLine = DownLine - 1
+			exe "normal " . TmpLine . "G"
+			return
+		endif
+		let DownLine = DownLine + 1
+		let DownIndent = indent(DownLine)
+	endwhile
+	exe "normal G"
+endfunction
+
+map vu :call JumpUp()<cr>
+map vd :call JumpDown()<cr>
