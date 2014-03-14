@@ -976,3 +976,104 @@ endfunction
 
 map vu :call JumpUp()<cr>
 map vd :call JumpDown()<cr>
+map vh :call MyC_Help('m')<cr>
+map    <buffer>  <silent>  <LocalLeader>hm         :call MyC_Help("m")<CR>
+imap    <buffer>  <silent>  <LocalLeader>hm    <C-C>:call MyC_Help("m")<CR>
+map    <buffer>  <silent>  vh         :call MyC_Help("m")<CR>
+imap    <buffer>  <silent>  vh    <C-C>:call MyC_Help("m")<CR>
+"
+let s:C_DocBufferName       = "C_HELP_man"
+let s:C_DocHelpBufferNumber = -1
+let s:C_Man                 = 'man'      " the manual program
+function! MyC_Help( type )
+	let cuc		= getline(".")[col(".") - 1]		" character under the cursor
+	let	item	= expand("<cword>")							" word under the cursor
+	if cuc == '' || item == "" || match( item, cuc ) == -1
+		let	item=C_Input('name of the manual page : ', '' )
+	endif
+
+	if item == ""
+		return
+	endif
+	"------------------------------------------------------------------------------
+	"  replace buffer content with bash help text
+	"------------------------------------------------------------------------------
+	"
+	" jump to an already open bash help window or create one
+	"
+	if bufloaded(s:C_DocBufferName) != 0 && bufwinnr(s:C_DocHelpBufferNumber) != -1
+		exe bufwinnr(s:C_DocHelpBufferNumber) . "wincmd w"
+		" buffer number may have changed, e.g. after a 'save as'
+		if bufnr("%") != s:C_DocHelpBufferNumber
+			let s:C_DocHelpBufferNumber=bufnr(s:C_OutputBufferName)
+			exe ":bn ".s:C_DocHelpBufferNumber
+		endif
+	else
+		exe ":new ".s:C_DocBufferName
+		let s:C_DocHelpBufferNumber=bufnr("%")
+		setlocal buftype=nofile
+		setlocal noswapfile
+		setlocal bufhidden=delete
+		setlocal filetype=sh		" allows repeated use of <S-F1>
+		setlocal syntax=OFF
+	endif
+	setlocal	modifiable
+	"
+	if a:type == 'm' 
+		"
+		" Is there more than one manual ?
+		"
+		let manpages	= system( s:C_Man.' -k '.item )
+		if v:shell_error
+			echomsg	"Shell command '".s:C_Man." -k ".item."' failed."
+			:close
+			return
+		endif
+		let	catalogs	= split( manpages, '\n', )
+		let	manual		= {}
+		"
+		" Select manuals where the name exactly matches
+		"
+		for line in catalogs
+			if line =~ '^'.item.'\s\+(' 
+				let	itempart	= split( line, '\s\+' )
+				let	catalog		= itempart[1][1:-2]
+				if match( catalog, '.p$' ) == -1
+					let	manual[catalog]	= catalog
+				endif
+			endif
+		endfor
+		"
+		" Build a selection list if there are more than one manual
+		"
+		let	catalog	= ""
+		if len(keys(manual)) > 1
+			for key in keys(manual)
+				echo ' '.item.'  '.key
+			endfor
+			let defaultcatalog	= ''
+			if has_key( manual, '3' )
+				let defaultcatalog	= '3'
+			else
+				if has_key( manual, '2' )
+					let defaultcatalog	= '2'
+				endif
+			endif
+			let	catalog	= input( 'select manual section (<Enter> cancels) : ', defaultcatalog )
+			if ! has_key( manual, catalog )
+				:close
+				:redraw
+				echomsg	"no appropriate manual section '".catalog."'"
+				return
+			endif
+		endif
+
+		set filetype=man
+		silent exe ":%!".s:C_Man." ".catalog." ".item
+
+	endif
+
+	setlocal nomodifiable
+endfunction		" ---------- end of function  C_Help  ----------
+
+
