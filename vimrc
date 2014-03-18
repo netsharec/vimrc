@@ -916,11 +916,13 @@ endif
 
 " 关闭标签后跳至左边标签
 let s:prevtabnum=tabpagenr('$')
+let s:prevtabid=tabpagenr()
 augroup TabClosed
-    autocmd! TabEnter * :if tabpagenr('$')<s:prevtabnum && tabpagenr()>1
+    autocmd! TabEnter * :if tabpagenr('$')<s:prevtabnum && tabpagenr()>1 && s:prevtabid != tabpagenr('$')+1
                 \       |   tabprevious
                 \       |endif
                 \       |let s:prevtabnum=tabpagenr('$')
+    		\	|let s:prevtabid=tabpagenr()
 augroup END
 
 au FileType c set colorcolumn=81
@@ -995,8 +997,8 @@ function! JumpDown()
 	exe "normal G"
 endfunction
 
-map <buffer>  <silent> vu :call JumpUp()<cr>
-map <buffer>  <silent> vd :call JumpDown()<cr>
+map vu :call JumpUp()<cr>
+map vd :call JumpDown()<cr>
 map    <buffer>  <silent>  <LocalLeader>hm         :call MyC_Help("m")<CR>
 " imap    <buffer>  <silent>  <LocalLeader>hm    <C-C>:call MyC_Help("m")<CR>
 " map    <buffer>  <silent>  vh         :call MyC_Help("m")<CR>
