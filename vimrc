@@ -854,6 +854,31 @@ if has("cscope")
     nmap <C-@><C-@>i :vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>	
     nmap <C-@><C-@>d :vert scs find d <C-R>=expand("<cword>")<CR><CR>
 
+    function! NewtabCS(cscmd)
+    	let s:cskeyword=expand("<cword>")
+    	:tabe
+	let s:newpagnr=tabpagenr()
+	try
+		exe "cs find " . a:cscmd s:cskeyword
+	catch
+		exe "tabc" . s:newpagnr
+		echoe "find null!^_^"
+		return
+	endtry
+	let s:prepagnr=tabpagenr()
+	if s:newpagnr != s:prepagnr
+		exe "tabc" . s:newpagnr
+	endif
+    endfunction
+    
+    nmap <C-i>s :call NewtabCS('s')<cr>
+    nmap <C-i>g :call NewtabCS('g')<cr>
+    nmap <C-i>c :call NewtabCS('c')<cr>
+    nmap <C-i>t :call NewtabCS('t')<cr>
+    nmap <C-i>e :call NewtabCS('e')<cr>
+    nmap <C-i>f :call NewtabCS('f')<cr>
+    nmap <C-i>i :call NewtabCS('i')<cr>
+    nmap <C-i>d :call NewtabCS('d')<cr>
 
     """"""""""""" key map timeouts
     "
@@ -905,10 +930,6 @@ au FileType python  set colorcolumn=81
 
 " 分界线颜色
 hi colorcolumn ctermbg=8 ctermfg=1
-
-" 判断是否存在可见字符
-function IsBlankLine(str)
-endfunction
 
 " 同级缩进块跳转
 function! JumpUp()
@@ -974,13 +995,12 @@ function! JumpDown()
 	exe "normal G"
 endfunction
 
-map vu :call JumpUp()<cr>
-map vd :call JumpDown()<cr>
-map vh :call MyC_Help('m')<cr>
+map <buffer>  <silent> vu :call JumpUp()<cr>
+map <buffer>  <silent> vd :call JumpDown()<cr>
 map    <buffer>  <silent>  <LocalLeader>hm         :call MyC_Help("m")<CR>
-imap    <buffer>  <silent>  <LocalLeader>hm    <C-C>:call MyC_Help("m")<CR>
-map    <buffer>  <silent>  vh         :call MyC_Help("m")<CR>
-imap    <buffer>  <silent>  vh    <C-C>:call MyC_Help("m")<CR>
+" imap    <buffer>  <silent>  <LocalLeader>hm    <C-C>:call MyC_Help("m")<CR>
+" map    <buffer>  <silent>  vh         :call MyC_Help("m")<CR>
+" imap    <buffer>  <silent>  vh    <C-C>:call MyC_Help("m")<CR>
 "
 let s:C_DocBufferName       = "C_HELP_man"
 let s:C_DocHelpBufferNumber = -1
@@ -1075,5 +1095,3 @@ function! MyC_Help( type )
 
 	setlocal nomodifiable
 endfunction		" ---------- end of function  C_Help  ----------
-
-
