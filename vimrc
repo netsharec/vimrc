@@ -110,7 +110,8 @@ Bundle 'Valloric/YouCompleteMe'
 " Bundle 'Lokaltog/vim-powerline'
 "
 " 注释工具 快捷键: ,ca ,cc ,c ,cs ,cA ,cu
-Bundle 'scrooloose/nerdcommenter'
+" Bundle 'scrooloose/nerdcommenter'
+
 let NERDSpaceDelims=1           " place spaces after comment chars
 let NERDDefaultNesting=0        " don't recomment commented lines
 "..................................
@@ -140,6 +141,8 @@ let g:ycm_confirm_extra_conf = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set shortmess=atI
+
 " Sets how many lines of history VIM has to remember
 set history=1700
 
@@ -159,10 +162,10 @@ let g:mapleader = ","
 nmap <leader>w :w!<cr>
 
 " Fast editing of the .vimrc
-map <leader>e :e! ~/.vim_runtime/vimrc<cr>
+map <leader>e :e! ~/.vim/vimrc<cr>
 
 " When vimrc is edited, reload it
-autocmd! bufwritepost vimrc source ~/.vim_runtime/vimrc
+autocmd! bufwritepost vimrc source ~/.vim/vimrc
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -908,7 +911,7 @@ if has("cscope")
     "
     "set ttimeoutlen=100
 
-    set timeoutlen=1500
+    set timeoutlen=800
     set ttimeout
     set ttimeoutlen=100
 endif
@@ -999,7 +1002,8 @@ endfunction
 
 map vu :call JumpUp()<cr>
 map vd :call JumpDown()<cr>
-map    <buffer>  <silent>  <LocalLeader>hm         :call MyC_Help("m")<CR>
+map vh :call MyC_Help("m")<CR>
+map    <LocalLeader>hm         :call MyC_Help("m")<CR>
 " imap    <buffer>  <silent>  <LocalLeader>hm    <C-C>:call MyC_Help("m")<CR>
 " map    <buffer>  <silent>  vh         :call MyC_Help("m")<CR>
 " imap    <buffer>  <silent>  vh    <C-C>:call MyC_Help("m")<CR>
