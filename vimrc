@@ -928,6 +928,8 @@ augroup TabClosed
     		\	|let s:prevtabid=tabpagenr()
 augroup END
 
+au FIleType c inoremap /* /*  */<ESC>hhi
+au FIleType cpp inoremap /* /*  */<ESC>hhi
 au FileType c set colorcolumn=81
 au FileType cpp set colorcolumn=81
 au FileType python  set colorcolumn=81
@@ -1108,3 +1110,4 @@ function! MyC_Help( type )
 
 	setlocal nomodifiable
 endfunction		" ---------- end of function  C_Help  ----------
+set formatoptions+=r
