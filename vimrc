@@ -105,6 +105,8 @@ Bundle 'gmarik/vundle'
 " Bundle 'Valloric/ListToggle'
 " Bundle 'SirVer/ultisnips'
 Bundle 'Valloric/YouCompleteMe'
+" 项目文件管理
+Bundle 'scrooloose/nerdtree'
 " Bundle 'scrooloose/syntastic'
 " Bundle 't9md/vim-quickhl'
 " Bundle 'Lokaltog/vim-powerline'
@@ -121,8 +123,8 @@ let NERDDefaultNesting=0        " don't recomment commented lines
 " Bundle 'ShowPairs'
 " Bundle 'SudoEdit.vim'
 " Bundle 'EasyGrep'
-Bundle 'VOoM'
-Bundle 'VimIM'
+" Bundle 'VOoM'
+" Bundle 'VimIM'
 "..................................
 " non github repos
 " Bundle 'git://git.wincent.com/command-t.git'
@@ -709,7 +711,18 @@ set tags+=/home/gle/glibc29/tags
 map <c-w><c-f> :FirstExplorerWindow<cr>
 map <c-w><c-b> :BottomExplorerWindow<cr>
 map <c-w><c-t> :WMToggle<cr>
-let g:winManagerWindowLayout='FileExplorer|TagList'
+" let g:winManagerWindowLayout='FileExplorer|TagList'
+let g:NERDTree_title="[NERDTree]"
+let g:winManagerWindowLayout='NERDTree|TagList'
+function! NERDTree_Start()  
+    exec 'NERDTree'  
+endfunction  
+  
+function! NERDTree_IsValid()  
+    return 1  
+endfunction  
+" nmap wm :WMToggle<CR> 
+
 :map <F6> :WMToggle<cr>
 filetype plugin on
 
@@ -1111,3 +1124,7 @@ function! MyC_Help( type )
 	setlocal nomodifiable
 endfunction		" ---------- end of function  C_Help  ----------
 set formatoptions+=r
+
+function! AddSearchStr(str)
+	let @/ = @/ . "\\|" . a:str
+endfunction
