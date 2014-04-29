@@ -1128,3 +1128,17 @@ set formatoptions+=r
 function! AddSearchStr(str)
 	let @/ = @/ . "\\|" . a:str
 endfunction
+
+function! DelSearchStr(str)
+	let searchstrs = split(@/, '\\|')
+	let l:searchstrinx = match(searchstrs, a:str)
+	if l:searchstrinx == -1
+		return
+	endif
+	call remove(searchstrs, l:searchstrinx)
+	let l:searchall = ""
+	for searchstr in searchstrs
+		let l:searchall = l:searchall . searchstr . '\|'
+	endfor
+	let @/ = l:searchall[0:-3]
+endfunction
