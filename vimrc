@@ -1126,7 +1126,11 @@ endfunction		" ---------- end of function  C_Help  ----------
 set formatoptions+=r
 
 function! AddSearchStr(str)
-	let @/ = @/ . "\\|" . a:str
+	if strlen(@/) > 0
+		let @/ = @/ . "\\|" . a:str
+	else
+		let @/ = a:str
+	endif
 endfunction
 
 function! DelSearchStr(str)
