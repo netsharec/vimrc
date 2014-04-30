@@ -1125,6 +1125,7 @@ function! MyC_Help( type )
 endfunction		" ---------- end of function  C_Help  ----------
 set formatoptions+=r
 
+" 增加搜索项
 function! AddSearchStr(str)
 	if strlen(@/) > 0
 		let searchstrs = split(@/, '\\|')
@@ -1138,6 +1139,7 @@ function! AddSearchStr(str)
 	endif
 endfunction
 
+" 删减搜索项
 function! DelSearchStr(str)
 	let searchstrs = split(@/, '\\|')
 	let l:searchstrinx = match(searchstrs, a:str)
@@ -1151,3 +1153,8 @@ function! DelSearchStr(str)
 	endfor
 	let @/ = l:searchall[0:-3]
 endfunction
+
+map <leader>a :call AddSearchStr(expand("<cword>"))<CR>
+vmap <leader>a :call AddSearchStr(@*)<CR>
+map <leader>d :call DelSearchStr(expand("<cword>"))<CR>
+vmap <leader>d :call DelSearchStr(@*)<CR>
