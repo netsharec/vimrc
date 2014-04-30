@@ -1127,6 +1127,11 @@ set formatoptions+=r
 
 function! AddSearchStr(str)
 	if strlen(@/) > 0
+		let searchstrs = split(@/, '\\|')
+		let l:searchstrinx = match(searchstrs, a:str)
+		if l:searchstrinx >= 0
+			return
+		endif
 		let @/ = @/ . "\\|" . a:str
 	else
 		let @/ = a:str
